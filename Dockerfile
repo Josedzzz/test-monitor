@@ -16,7 +16,7 @@ WORKDIR /app
 
 COPY --from=builder /app/docker-monitor .
 
-EXPOSE 81
+ENV DOCKER_API_VERSION=1.45
 
 ENTRYPOINT ["./docker-monitor"]
 
