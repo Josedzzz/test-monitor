@@ -18,5 +18,5 @@ func main() {
 	r := api.NewRouter(cli)
 
 	fmt.Println("Server in: http://localhost:8000")
-	log.Fatal(http.ListenAndServe(":8000", r))
+	log.Fatal(http.ListenAndServe("0.0.0.0:81", r))
 }
