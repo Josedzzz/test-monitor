@@ -9,8 +9,20 @@ import (
 	"github.com/docker/docker/client"
 )
 
+func NewDockerClient() (*client.Client, error) {
+	cli, err := client.NewClientWithOpts(
+		client.FromEnv,
+		client.WithAPIVersionNegotiation(),
+		client.WithVersion("1.45"),
+	)
+	if err != nil {
+		return nil, err
+	}
+	return cli, nil
+}
+
 func main() {
-	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
+	cli, err := NewDockerClient()
 	if err != nil {
 		log.Fatalf("Error while creating the docker client: %v", err)
 	}

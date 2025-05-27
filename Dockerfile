@@ -1,26 +1,22 @@
-# Build stage
+# Etapa 1: build
 FROM golang:1.24 AS builder
 
 WORKDIR /app
 
-# Download Go modules
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copy the entire project
 COPY . .
 
-# Build the Go binary
-RUN go build -o docker-monitor ./cmd
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -o docker-monitor ./cmd
 
-# Final stage (slim runtime)
-FROM debian:bullseye-slim
+FROM scratch
 
 WORKDIR /app
 
-# Copy the binary from the builder
 COPY --from=builder /app/docker-monitor .
 
-# Start the application
-CMD ["./docker-monitor"]
+EXPOSE 81
+
+ENTRYPOINT ["./docker-monitor"]
 
