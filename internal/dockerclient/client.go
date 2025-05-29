@@ -3,7 +3,7 @@ package dockerclient
 import (
 	"context"
 
-	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
 )
 
@@ -22,7 +22,7 @@ func ListContainers() ([]ContainerInfo, error) {
 	}
 	defer cli.Close()
 
-	containers, err := cli.ContainerList(context.Background(), container.ListOptions{All: true})
+	containers, err := cli.ContainerList(context.Background(), types.ContainerListOptions{All: true})
 	if err != nil {
 		return nil, err
 	}
@@ -40,9 +40,9 @@ func ListContainers() ([]ContainerInfo, error) {
 }
 
 func StartContainer(cli *client.Client, containerID string) error {
-	return cli.ContainerStart(context.Background(), containerID, container.StartOptions{})
+	return cli.ContainerStart(context.Background(), containerID, types.ContainerStartOptions{})
 }
 
 func StopContainer(cli *client.Client, containerID string) error {
-	return cli.ContainerStop(context.Background(), containerID, container.StopOptions{})
+	return cli.ContainerStop(context.Background(), containerID, nil)
 }
