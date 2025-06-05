@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/Josedzzz/test-monitor/internal/dockerclient"
+	"github.com/Josedzzz/test-monitor/internal/logs"
 	"github.com/docker/docker/client"
 	"github.com/gorilla/mux"
 )
@@ -24,5 +25,6 @@ func StartContainer(cli *client.Client) http.HandlerFunc {
 		}
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
+		logs.Info("Container " + id + " started")
 	}
 }
