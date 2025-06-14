@@ -7,6 +7,7 @@ import (
 	"github.com/Josedzzz/test-monitor/internal/dockerclient"
 )
 
+// handles get requests to return the list of containers
 func GetContainers(w http.ResponseWriter, r *http.Request) {
 	containers, err := dockerclient.ListContainers()
 	if err != nil {

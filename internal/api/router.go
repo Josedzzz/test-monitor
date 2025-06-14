@@ -6,6 +6,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// configures the http routes to their respective handlers
 func NewRouter(cli *client.Client) *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/containers", handlers.GetContainers).Methods("GET")

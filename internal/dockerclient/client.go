@@ -7,6 +7,7 @@ import (
 	"github.com/docker/docker/client"
 )
 
+// struct for the docker container info
 type ContainerInfo struct {
 	Id     string   `json:"id"`
 	Names  []string `json:"names"`
@@ -15,6 +16,7 @@ type ContainerInfo struct {
 	Status string   `json:"status"`
 }
 
+// returns a list of all containers, running and stopped
 func ListContainers() ([]ContainerInfo, error) {
 	cli, err := client.NewClientWithOpts(client.FromEnv)
 	if err != nil {
@@ -39,10 +41,12 @@ func ListContainers() ([]ContainerInfo, error) {
 	return result, nil
 }
 
+// starts a container by the id using the given docker client
 func StartContainer(cli *client.Client, containerID string) error {
 	return cli.ContainerStart(context.Background(), containerID, types.ContainerStartOptions{})
 }
 
+// stops a container by the id using the given docker client
 func StopContainer(cli *client.Client, containerID string) error {
 	return cli.ContainerStop(context.Background(), containerID, nil)
 }

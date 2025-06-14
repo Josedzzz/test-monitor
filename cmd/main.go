@@ -12,6 +12,7 @@ import (
 	"github.com/docker/docker/client"
 )
 
+// creates a new docker client
 func NewDockerClient() (*client.Client, error) {
 	cli, err := client.NewClientWithOpts(
 		client.FromEnv,
@@ -28,9 +29,17 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error while creating the docker client: %v", err)
 	}
+
+	// set up http router with docker client
 	r := api.NewRouter(cli)
+
+	// init logging system
 	_ = logs.InitLog()
+
+	// start monitor every 30 min
 	monitor.StartMonitoring(cli, 30*time.Minute)
+
+	// start http service on port 81
 	fmt.Println("Server is up!!!")
 	log.Fatal(http.ListenAndServe("0.0.0.0:81", r))
 }

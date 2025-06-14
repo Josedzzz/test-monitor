@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// returns an http handler that stops a docker container by id
 func StopContainer(cli *client.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)

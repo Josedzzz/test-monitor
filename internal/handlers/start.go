@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// returns an http handler that strats a docker container by id
 func StartContainer(cli *client.Client) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
