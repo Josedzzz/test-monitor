@@ -1,21 +1,39 @@
+# Build artifacts
 /bin/
 /build/
 /dist/
+/*.out
+
+# Test binaries
+*.test
+
+# Executables
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
-*.test
 
+# Logs
 *.log
+logs/
+monitor-client/logs/
+monitor-server/logs/
 
-*.out
+# Temporary files
 *.tmp
 *.swp
 *.swo
 *~
 
+# Editor and system files
 .DS_Store
 .AppleDouble
 .LSOverride
+.idea/
+.vscode/
+*.code-workspace
+
+# Environment files
+.env
+.env.*
