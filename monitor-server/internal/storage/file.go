@@ -8,6 +8,7 @@ import (
 	"github.com/Josedzzz/monitor-server/internal/models"
 )
 
+// writes a log entry to a file named after the vmId and appends the log entry
 func SaveLog(p models.LogPayload) error {
 	logDir := "logs"
 
