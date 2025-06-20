@@ -5,8 +5,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// setup the http routes for the monitoring server
 func NewRouter() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/logs", handlers.ReceiveLog).Methods("POST")
+	r.HandleFunc("/machines", handlers.ListMachines).Methods("GET")
 	return r
 }
