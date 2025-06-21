@@ -10,5 +10,6 @@ func NewRouter() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/logs", handlers.ReceiveLog).Methods("POST")
 	r.HandleFunc("/machines", handlers.ListMachines).Methods("GET")
+	r.HandleFunc("/logs/${vm_id}", handlers.GetLogsByVm).Methods("GET")
 	return r
 }

@@ -4,10 +4,28 @@ import (
 	"encoding/json"
 	"net"
 	"net/http"
+	"os"
 
 	"github.com/Josedzzz/monitor-server/internal/models"
 	"github.com/Josedzzz/monitor-server/internal/storage"
+	"github.com/gorilla/mux"
 )
+
+// returns the log content for a specific vm
+func GetLogsByVm(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	vmID := vars["vm_id"]
+	logPath := "logs/" + vmID + ".log"
+
+	data, err := os.ReadFile(logPath)
+	if err != nil {
+		http.Error(w, "Failed to read log file: "+err.Error(), http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(data)
+}
 
 // handles incoming log data from a monitor-client instance
 func ReceiveLog(w http.ResponseWriter, r *http.Request) {
