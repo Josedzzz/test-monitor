@@ -19,12 +19,21 @@ func GetLogsByVm(w http.ResponseWriter, r *http.Request) {
 
 	data, err := os.ReadFile(logPath)
 	if err != nil {
-		http.Error(w, "Failed to read log file: "+err.Error(), http.StatusNotFound)
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "Log file not found for VM: " + vmID,
+			"error":   err.Error(),
+		})
 		return
 	}
 
+	response := map[string]string{
+		"message": "Log file retrieved successfully",
+		"log":     string(data),
+	}
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(data)
+	json.NewEncoder(w).Encode(response)
 }
 
 // handles incoming log data from a monitor-client instance
