@@ -20,6 +20,9 @@ logs/
 monitor-client/logs/
 monitor-server/logs/
 
+# Machine info
+monitor-server/machine_info
+
 # Temporary files
 *.tmp
 *.swp
