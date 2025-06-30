@@ -1,52 +1,54 @@
 package storage
 
 import (
-	"strings"
-	"sync"
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/Josedzzz/monitor-server/internal/models"
 )
 
-var (
-	machineMap = make(map[string]models.MachineInfo)
-	mu         sync.Mutex
-)
-
 // called when a log is recived to update the vm info
 func UpdateMachineInfo(vmId, ip, message string) {
-	mu.Lock()
-	defer mu.Unlock()
-
-	containers := extractContainerFromMessage(message)
-
-	machineMap[vmId] = models.MachineInfo{
-		VMID:       vmId,
-		IP:         ip,
-		LastSeen:   time.Now(),
-		Containers: containers,
+	info := models.MachineInfo{
+		VMID:     vmId,
+		IP:       ip,
+		LastSeen: time.Now(),
 	}
+
+	saveMachineInfoToDisk(info)
 }
 
 // returns the machines info
 func GetAllMachines() []models.MachineInfo {
-	mu.Lock()
-	defer mu.Unlock()
-
-	var list []models.MachineInfo
-	for _, m := range machineMap {
-		list = append(list, m)
+	dir := "machine_info"
+	files, err := os.ReadDir(dir)
+	if err != nil {
+		return nil
 	}
-	return list
-}
 
-// container name extraction (example: "Container: /nginx is running")
-func extractContainerFromMessage(msg string) []string {
-	if strings.Contains(msg, "Container: ") {
-		parts := strings.Split(msg, " ")
-		if len(parts) >= 2 {
-			return []string{parts[1]}
+	var result []models.MachineInfo
+	for _, file := range files {
+		if filepath.Ext(file.Name()) == ".json" {
+			data, err := os.ReadFile(filepath.Join(dir, file.Name()))
+			if err == nil {
+				var m models.MachineInfo
+				if json.Unmarshal(data, &m) == nil {
+					result = append(result, m)
+				}
+			}
 		}
 	}
-	return nil
+	return result
+}
+
+func saveMachineInfoToDisk(info models.MachineInfo) {
+	dir := "machine_info"
+	_ = os.MkdirAll(dir, os.ModePerm)
+
+	path := filepath.Join(dir, fmt.Sprintf("%s.json", info.VMID))
+	data, _ := json.MarshalIndent(info, "", "  ")
+	_ = os.WriteFile(path, data, 0o644)
 }
