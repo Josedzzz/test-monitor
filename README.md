@@ -7,7 +7,6 @@
 ## Features
 
 - **Real-time container monitoring** on each VM
-- **Remote logging** from clients to the central server via HTTPS
 - **Structured log storage** per machine
 - **API to list machines**, their IPs, and active containers
 - **Start/Stop containers** on individual VMs through HTTP requests
