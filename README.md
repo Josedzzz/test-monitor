@@ -85,6 +85,6 @@ Since the project is still in early development, there may be bugs or areas wher
 
 Contributions are welcome! Feel free to fork this repo, submit pull requests, or open issues for bugs and improvements.
 
-## Author
+## <3
 
-Developed by @Josedzzz with <3 for learning, DevOps experimentation, and container monitoring.
+Developed with love for learning, DevOps experimentation, and container monitoring.
