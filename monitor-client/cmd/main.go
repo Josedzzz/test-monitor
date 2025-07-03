@@ -10,6 +10,7 @@ import (
 	"github.com/Josedzzz/test-monitor/internal/logs"
 	"github.com/Josedzzz/test-monitor/internal/monitor"
 	"github.com/docker/docker/client"
+	"github.com/gorilla/handlers"
 )
 
 // creates a new docker client
@@ -33,6 +34,13 @@ func main() {
 	// set up http router with docker client
 	r := api.NewRouter(cli)
 
+	// handle cors validation
+	corsHandler := handlers.CORS(
+		handlers.AllowedOrigins([]string{"http://localhost:5173"}),
+		handlers.AllowedMethods([]string{"GET", "POST", "OPTIONS"}),
+		handlers.AllowedHeaders([]string{"Content-Type"}),
+	)(r)
+
 	// init logging system
 	_ = logs.InitLog()
 
@@ -41,5 +49,5 @@ func main() {
 
 	// start http service on port 81
 	fmt.Println("Server is up!!!")
-	log.Fatal(http.ListenAndServe("0.0.0.0:81", r))
+	log.Fatal(http.ListenAndServe("0.0.0.0:81", corsHandler))
 }
