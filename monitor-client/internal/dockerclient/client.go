@@ -50,3 +50,8 @@ func StartContainer(cli *client.Client, containerID string) error {
 func StopContainer(cli *client.Client, containerID string) error {
 	return cli.ContainerStop(context.Background(), containerID, nil)
 }
+
+// inspects the info of a container by the id using the given docker client
+func InspectContainer(cli *client.Client, containerID string) (types.ContainerJSON, error) {
+	return cli.ContainerInspect(context.Background(), containerID)
+}
