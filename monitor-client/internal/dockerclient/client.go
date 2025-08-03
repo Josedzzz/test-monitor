@@ -2,6 +2,8 @@ package dockerclient
 
 import (
 	"context"
+	"io"
+	"strings"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
@@ -54,4 +56,25 @@ func StopContainer(cli *client.Client, containerID string) error {
 // inspects the info of a container by the id using the given docker client
 func InspectContainer(cli *client.Client, containerID string) (types.ContainerJSON, error) {
 	return cli.ContainerInspect(context.Background(), containerID)
+}
+
+// gets the container logs by the id and a tail
+func GetContainerLogs(cli *client.Client, containerID string, tail string) (string, error) {
+	options := types.ContainerLogsOptions{
+		ShowStdout: true,
+		ShowStderr: true,
+		Timestamps: true,
+		Tail:       tail,
+	}
+	out, err := cli.ContainerLogs(context.Background(), containerID, options)
+	if err != nil {
+		return "", err
+	}
+	defer out.Close()
+	var sb strings.Builder
+	_, err = io.Copy(&sb, out)
+	if err != nil {
+		return "", err
+	}
+	return sb.String(), nil
 }
