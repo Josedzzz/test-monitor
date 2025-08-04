@@ -14,5 +14,6 @@ func NewRouter(cli *client.Client) *mux.Router {
 	r.HandleFunc("/containers/{id}/stop", handlers.StopContainer(cli)).Methods("POST")
 	r.HandleFunc("/containers/{id}/inspect", handlers.InspectContainer(cli)).Methods("GET")
 	r.HandleFunc("/containers/{id}/logs", handlers.GetContainerLogsHandler(cli)).Methods("GET")
+	r.HandleFunc("/containers/{id}/stats", handlers.GetContainerStatsHandler(cli)).Methods("GET")
 	return r
 }

@@ -2,6 +2,7 @@ package dockerclient
 
 import (
 	"context"
+	"encoding/json"
 	"io"
 	"strings"
 
@@ -77,4 +78,22 @@ func GetContainerLogs(cli *client.Client, containerID string, tail string) (stri
 		return "", err
 	}
 	return sb.String(), nil
+}
+
+// gets the container stats by the id
+func GetContainerStats(cli *client.Client, containerID string) (*types.StatsJSON, error) {
+	stats, err := cli.ContainerStats(context.Background(), containerID, false)
+	if err != nil {
+		return nil, err
+	}
+	defer stats.Body.Close()
+	var StatsJSON types.StatsJSON
+	body, err := io.ReadAll(stats.Body)
+	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(body, &StatsJSON); err != nil {
+		return nil, err
+	}
+	return &StatsJSON, nil
 }
